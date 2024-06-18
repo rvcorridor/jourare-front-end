@@ -1,5 +1,5 @@
 <script setup>
-import {computed, ref} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 
 const currentUser = ref({
   loggedIn : false,
@@ -34,8 +34,8 @@ function login (n) {
   currentUser.value.loggedIn = true;
 }
 async function logout() {
-  const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/logout", {
-    method : 'POST',
+  const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/session", {
+    method : 'DELETE',
     credentials: 'include'
   })
 
@@ -48,7 +48,7 @@ async function logout() {
   }
 }
 
-fetchDetails()
+onMounted(() => fetchDetails())
 
 </script>
 
@@ -80,7 +80,7 @@ fetchDetails()
   </main>
 </template>
 
-<style scoped>
+<style>
 #title-logo {
   font-family: times new roman, serif;
   font-size: 36pt;
@@ -99,5 +99,13 @@ header {
 }
 #navigation {
   margin-top: 25px
+}
+
+a:visited {
+  color : #0000EE;
+}
+
+a:active {
+  color: inherit;
 }
 </style>

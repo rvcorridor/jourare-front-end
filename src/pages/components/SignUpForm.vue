@@ -13,7 +13,7 @@ const signup = ref({
 })
 
 async function handleSignUp() {
-  const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/signup", {
+  const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/account", {
     method : 'POST',
     credentials : 'include',
     headers: {

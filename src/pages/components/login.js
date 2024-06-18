@@ -1,5 +1,5 @@
 async function doLogIn (username, password) {
-    const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/login", {
+    const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/session", {
         method : 'POST',
         credentials : 'include',
         headers : {
