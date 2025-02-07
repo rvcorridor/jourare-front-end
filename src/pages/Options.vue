@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <p>Hiii</p>
+  <p>Filler text here</p>
 </template>
 
 <style scoped>

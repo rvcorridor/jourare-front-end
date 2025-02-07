@@ -21,14 +21,13 @@ async function fetchDetails () {
   if (responseJSON.loggedIn) {
     currentUser.value.loggedIn = true
     currentUser.value.username = responseJSON.sessionDetails.username
-    currentUser.userID = responseJSON.sessionDetails.userID
+    currentUser.value.userID = responseJSON.sessionDetails.user_id
   } else {
     // do nothing
   }
 }
 
 function login (n) {
-  console.log(n)
   currentUser.value.username = n.username;
   currentUser.value.userID = n.response.info.user_id;
   currentUser.value.loggedIn = true;
@@ -76,7 +75,7 @@ onMounted(() => fetchDetails())
   </header>
 
   <main>
-    <RouterView @login="login"/>
+    <RouterView @login="login" v-bind="{viewer : currentUser.userID}"/>
   </main>
 </template>
 
