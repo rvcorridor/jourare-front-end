@@ -58,19 +58,24 @@ onMounted(() => fetchDetails())
       <div id="tgl-logo">The journal to share.</div>
     </div>
     <div id="navigation">
-      <RouterLink to="/">Home</RouterLink>&nbsp
+      <RouterLink to="/">Home</RouterLink>&nbsp;
+      <span v-if="currentUser.loggedIn">
+        <RouterLink to="/feed">
+          Your feed
+        </RouterLink>&nbsp;
+      </span>&nbsp;
+      <RouterLink to="/options">
+        Options
+      </RouterLink>&nbsp;
       <span v-if="currentUser.loggedIn">
         <RouterLink v-bind:to="currUserLink">
           {{ currentUser.username }}
-        </RouterLink>&nbsp;&nbsp
+        </RouterLink>&nbsp;
         <a @click="logout">Log Out</a>
       </span>
       <RouterLink to="/login" v-else>
         Sign up / Log in
-      </RouterLink> &nbsp;
-      <RouterLink to="/options">
-        Options
-      </RouterLink>
+      </RouterLink>&nbsp;
     </div>
   </header>
 
