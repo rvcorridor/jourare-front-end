@@ -80,7 +80,7 @@ onMounted(() => fetchDetails())
   </header>
 
   <main>
-    <RouterView @login="login" v-bind="{viewer : currentUser.userID}"/>
+    <RouterView @login="login" v-bind="{viewer : currentUser.userID}" :key="$route.fullPath"/>
   </main>
 </template>
 

@@ -1,16 +1,27 @@
 <script setup>
-import {onMounted, watch, ref} from "vue";
+import {onMounted, watch, ref, computed} from "vue";
 import {useRouter} from "vue-router";
 import Thread from "@/pages/profile-pages/components/Thread.vue";
 
 const props = defineProps(['userID'])
 const threads = ref([])
+const threadsLoop = computed(() => {
+  return threads.value.map((t) => {
+    return {
+      username : t.sender_username,
+      body : t.body,
+      dateSent : new Date(t.date_of_creation),
+      threadID : t.thread_id
+    }
+  })
+})
 const router = useRouter()
 const page = ref(0)
 
 const draftThread = ref('');
 
 async function getMessages (userID, newPage) {
+  if (userID === -1) return;
   const q = await fetch(import.meta.env.VITE_BACKEND_URL + "/account/" + props.userID + "/threads?" + new URLSearchParams({
     page : isNaN(newPage) ? 0 : newPage
   }), {
@@ -27,7 +38,6 @@ async function getMessages (userID, newPage) {
 
 
 onMounted(async () => {
-  console.log(props.userID)
   try {
     const query = await getMessages(props.userID)
     console.log(query)
@@ -36,6 +46,8 @@ onMounted(async () => {
     } else {
       threads.value = []
     }
+    console.log(threads.value)
+    console.log(threadsLoop.value)
     //updateThreads(query.messages)
   } catch (e) {
     console.log(e)
@@ -90,8 +102,8 @@ async function sendMessage () {
       <input type="submit">
     </form>
 
-    <div v-for="t in threads">
-      <Thread :username="t.sender_username" :profile-picture="t.sender_profile_picture" :date-sent="new Date(t.date_of_creation)" :body="t.body" :thread-i-d="t.thread_id"/>
+    <div v-for="t in threadsLoop">
+      <Thread :message="t"/>
     </div>
 
     <br>

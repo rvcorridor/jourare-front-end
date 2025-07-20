@@ -3,6 +3,19 @@
 import {computed, onMounted} from "vue";
 
 const props=defineProps(['post', 'option'])
+const computedLink=computed(() => {
+  if (props.option !== 'comment') {
+    return {
+      name : 'statusPost',
+      params : {
+        username : props.post.username,
+        statusID : props.post.status_id
+      }
+    }
+  } else return {
+    name : "home"
+  }
+})
 
 const pfpURL = computed(() => {
   return props.post.profile_picture ? import.meta.env.VITE_BACKEND_URL + "/account/profile-picture/" + props.post.profile_picture : "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
@@ -28,7 +41,7 @@ onMounted(() => {
     </div>
     <div class="footer">
       <span>
-        <RouterLink :to="{name : 'statusPost', params : { username : $props.post.username, statusID : $props.post.status_id }}">
+        <RouterLink :to="computedLink">
           posted {{ (new Date(post.date_of_creation)).toLocaleString() }}
         </RouterLink>
       </span>

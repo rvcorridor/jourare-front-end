@@ -8,7 +8,7 @@ import Status from "@/pages/feed-components/Status.vue";
 <template>
   <div>
     <h1>Hey</h1>
-    <RouterView :userID="$props.userID"/>
+    <RouterView :userID="$props.userID" :key="$route.fullPath"/>
   </div>
 </template>
 

@@ -4,7 +4,6 @@ import {onBeforeRouteUpdate, useRoute, useRouter} from "vue-router";
 import Follow from "@/pages/components/Follow.vue";
 
 const route = useRoute()
-const router = useRouter()
 const props = defineProps(['viewer'])
 
 const profile = ref({
@@ -16,6 +15,8 @@ const profile = ref({
   signedUp : new Date(),
   relationship : {}
 })
+
+const isBlocked = computed(() => profile.value.relationship.receives === 2)
 
 const pfpURL = computed(() => {
   return import.meta.env.VITE_BACKEND_URL + "/account/profile-picture/" + profile.value.profilePicture
@@ -32,6 +33,7 @@ async function updateProfile (username) {
   })
 
   const q = await query.json()
+  console.log(q)
 
   if (q.gotProfile) {
     let p = profile.value
@@ -48,12 +50,6 @@ async function updateProfile (username) {
 }
 
 updateProfile(route.params.username)
-
-watch(() => route.params.username, (newVal) => {
-  profile.value.username = newVal
-  console.log('hi')
-  updateProfile(newVal)
-})
 
 function updateRelationship (changes) {
   changes.map(c => {
@@ -77,14 +73,14 @@ function updateRelationship (changes) {
       </div>
     </div>
 
-    <div id="follow">
+    <div id="follow" v-if="!isBlocked">
       <Follow v-bind:initiates="profile.relationship.initiates" v-bind:receives="profile.relationship.receives"
               v-bind:userID="profile.userID" v-if="Number(profile.userID) !== Number($props.viewer)"
               @update-relationship="updateRelationship" class="button"/>
       <span v-else class="button">(your profile)</span>
     </div>
 
-    <div>
+    <div v-if="!isBlocked">
       <div id="profile-tagline"> {{ profile.tagline }} </div>
       <div id="join-date"> Joined {{ profile.signedUp.toDateString() }} </div>
       <div id="profile-navigation">
@@ -94,8 +90,12 @@ function updateRelationship (changes) {
         <router-link :to="{name : 'followers', params : { username : profile.username}}">View followers</router-link>
       </div>
 
-      <RouterView :key="profile.userID" :userID="profile.userID" v-slot="{ Component }">
+      <RouterView :key="`user:${profile.userID}`" :userID="profile.userID" v-slot="{ Component }">
       </RouterView>
+    </div>
+
+    <div v-else>
+      You have been blocked :(
     </div>
   </div>
 </template>

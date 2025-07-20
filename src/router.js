@@ -10,6 +10,8 @@ import Statuses from "@/pages/profile-pages/Statuses.vue";
 import Thread from "@/pages/profile-pages/components/Thread.vue";
 import Followers from "@/pages/profile-pages/Followers.vue";
 import Status from "@/pages/feed-components/Status.vue";
+import MessagesWrapper from "@/pages/profile-pages/MessagesWrapper.vue";
+import SingularThread from "@/pages/profile-pages/SingularThread.vue";
 
 const routes = [
     { path : "/", component : HomeView, name : "home"},
@@ -18,12 +20,10 @@ const routes = [
     { path : "/:id([0-9]+)", component : ProfileView },
     { path : "/:username([0-9A-z]+)", name: "profile", component : ProfileView,
         children : [
-            {path : 'messages', name : "messages", component : Messages,
-                children : [{
-                        path: ":threadID([0-9]+)",
-                        name: "thread",
-                        component : Thread
-                    }]
+            {path : 'messages/', component : MessagesWrapper, children : [
+                    {path: ':threadID([0-9]+)', name: "thread", component : SingularThread},
+                    {path: '', name: "messages", component : Messages}
+                ]
             },
             {path : 'journals', name : "journals", component : Journals},
             {path : 'statuses', name : "statuses", component : Statuses,

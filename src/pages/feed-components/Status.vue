@@ -3,6 +3,7 @@
 import {useRoute, useRouter} from "vue-router";
 import FeedPost from "@/pages/feed-components/Feed-Post.vue";
 import {onMounted, ref} from "vue";
+import CommentSection from "@/pages/feed-components/Comment-Section.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -35,7 +36,8 @@ onMounted(async () => {
 
 <template>
 <div>
-  <FeedPost :post="post"/>
+  <FeedPost :post="post" :key="`status:${route.params.statusID}`"/>
+  <CommentSection :user-i-d="$props.userID" :post-i-d="route.params.statusID"/>
 </div>
 </template>
 

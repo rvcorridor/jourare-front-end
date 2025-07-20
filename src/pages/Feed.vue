@@ -9,6 +9,7 @@ const currOffset=ref(5)
 
 
 async function getFeed (offset, limit) {
+  console.log(offset)
   const q = await fetch(import.meta.env.VITE_BACKEND_URL + "/feed?" + new URLSearchParams({
     "offset" : isNaN(offset) ? 0 : offset,
     "limit" : isNaN(limit) ? 5 : limit
@@ -25,20 +26,15 @@ async function getFeed (offset, limit) {
 }
 
 onMounted(async () => {
-  console.log(props.userID)
   const query = await getFeed(0, 5)
-  console.log(query)
   feed.value=query;
-  console.log(feed.value);
-
 })
 
 async function loadMorePosts () {
   const query = await getFeed(currOffset.value, 5)
-  feed.value = feed.value.concat(query)
   currOffset.value += 5;
-  console.log(feed.value);
-
+  feed.value = feed.value.concat(query)
+  console.log(query);
 }
 
 
