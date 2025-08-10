@@ -30,23 +30,14 @@ async function sendPost () {
 </script>
 
 <template>
-  <div id="feed-text-border">
     <form @submit.prevent="sendPost">
       <textarea id="feed-text-box" v-model="post"/>
-      <input type="submit" />
+      <input type="submit" value="Post!"/>
     </form>
-  </div>
 
 </template>
 
 <style scoped>
-
-#feed-text-border {
-  padding: 5px;
-  border: 1px solid black;
-  border-radius: 3px;
-  width: 600px;
-}
 
 #feed-text-box {
   width: 598px;

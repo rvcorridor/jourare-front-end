@@ -4,7 +4,7 @@ import {computed, onMounted, ref} from "vue";
 import FeedPost from "@/pages/feed-components/Feed-Post.vue";
 import FeedTextBox from "@/pages/feed-components/Feed-Text-Box.vue";
 
-const props=defineProps(['viewer'])
+const props=defineProps(['viewer', 'source'])
 const feed=ref([])
 const currOffset=ref(5)
 
@@ -37,9 +37,6 @@ async function loadMorePosts () {
   feed.value = feed.value.concat(query)
   console.log(query);
 }
-
-
-
 
 </script>
 
