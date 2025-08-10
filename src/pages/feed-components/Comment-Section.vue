@@ -2,7 +2,7 @@
 
 import {computed, onMounted, ref} from "vue";
 import Status from "@/pages/feed-components/Status.vue";
-import FeedPost from "@/pages/feed-components/Feed-Post.vue";
+import FeedBlock from "@/pages/feed-components/Feed-Block.vue";
 
 const props=defineProps(['userID', 'postID'])
 const commentOffset=ref(0)
@@ -10,10 +10,8 @@ const comments=ref([])
 const currTimeStamp=ref(new Date());
 const limit=5
 const commentsAsPost=computed(() => {
-  console.log(comments.value)
   const arr = []
   for (const x of comments.value) {
-    console.log(x)
     arr.push({
       display_name : x.display_name,
       profile_picture : x.profile_picture,
@@ -22,7 +20,6 @@ const commentsAsPost=computed(() => {
       username : x.username
     })
   }
-  console.log(arr)
   return arr
 })
 
@@ -42,11 +39,8 @@ async function getComments(postID, offset, limit) {
 }
 
 onMounted(async () => {
-  console.log(props)
-  if (props.userID === -1) return;
-
+  if (props.userID === -1 || props.userID === undefined) return;
   const m = await getComments(props.postID, 0, 5)
-  console.log(m);
   comments.value=m.comments;
 })
 
@@ -55,7 +49,7 @@ onMounted(async () => {
 <template>
   <div>Comments</div>
   <div v-for="x in commentsAsPost">
-    <FeedPost :post="x" :option="'comment'"/>
+    <FeedBlock :post="x" :option="'comment'"/>
   </div>
 </template>
 

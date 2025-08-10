@@ -31,11 +31,15 @@ const routes = [
                     path: ":statusID([0-9]+)",
                     name: "statusPost",
                     component: Status
+                },{
+                    path: "",
+                    name: "accountstatuses",
+                    component: Feed
                 }]},
             {path : 'followers', name : "followers", component : Followers},
         ]
     },
-    { path : "/feed", component : Feed }
+    { path : "/feed", name : "feed", component : Feed }
 ]
 
 const router = createRouter({

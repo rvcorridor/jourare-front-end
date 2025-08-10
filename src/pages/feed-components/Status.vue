@@ -1,16 +1,13 @@
 <script setup>
 
 import {useRoute, useRouter} from "vue-router";
-import FeedPost from "@/pages/feed-components/Feed-Post.vue";
-import {onMounted, ref} from "vue";
-import CommentSection from "@/pages/feed-components/Comment-Section.vue";
+import {computed, onMounted, ref} from "vue";
+import StatusComponent from "@/pages/feed-components/Status-Component.vue";
 
 const route = useRoute()
 const router = useRouter()
 const props = defineProps(["userID"])
 const post = ref({})
-
-console.log(route.params.statusID);
 
 async function getPost (statusID) {
   const q = await fetch(import.meta.env.VITE_BACKEND_URL + "/account/" + props.userID + "/statuses/" + statusID, {
@@ -28,16 +25,15 @@ onMounted(async () => {
   if (props.userID === -1) return;
   const m = await getPost(route.params.statusID)
   console.log(m)
-  post.value = m;
-
+  if (m.gotStatus === true)
+  post.value = m.data;
 });
 
 </script>
 
 <template>
 <div>
-  <FeedPost :post="post" :key="`status:${route.params.statusID}`"/>
-  <CommentSection :user-i-d="$props.userID" :post-i-d="route.params.statusID"/>
+  <Status-Component :post="post" :comment-section="true" :key="post.status_id"/>
 </div>
 </template>
 

@@ -1,17 +1,37 @@
 <script setup>
 
 import {computed, onMounted, ref} from "vue";
-import FeedPost from "@/pages/feed-components/Feed-Post.vue";
-import FeedTextBox from "@/pages/feed-components/Feed-Text-Box.vue";
+import FeedPost from "@/pages/feed-components/Feed-Block.vue";
+import FeedTextBox from "@/pages/feed-components/Feed-Input-Box.vue";
+import {useRouter} from "vue-router";
 
-const props=defineProps(['viewer', 'source'])
+const props=defineProps(['viewer', 'userID'])
 const feed=ref([])
 const currOffset=ref(5)
+const morePosts = ref(true);
+const router = useRouter();
+const showTextBox = computed(() => {
+  if (router.currentRoute.value.name === "feed") {
+    return true;
+  } else {
+    return false;
+  }
+
+})
+
+const source=computed(() => {
+
+  if (router.currentRoute.value.name === "feed") {
+    return "feed";
+  } else {
+    return `account/${props.userID}/statuses`;
+  }
+})
 
 
 async function getFeed (offset, limit) {
   console.log(offset)
-  const q = await fetch(import.meta.env.VITE_BACKEND_URL + "/feed?" + new URLSearchParams({
+  const q = await fetch(import.meta.env.VITE_BACKEND_URL + `/${source.value}?` + new URLSearchParams({
     "offset" : isNaN(offset) ? 0 : offset,
     "limit" : isNaN(limit) ? 5 : limit
   }), {
@@ -23,12 +43,31 @@ async function getFeed (offset, limit) {
     }
   })
 
-  return q.json()
+  const query = await q.json()
+  let array;
+
+  if (router.currentRoute.value.name === "feed") {
+    if (query.length === 0) morePosts.value = false;
+    array = query;
+  } else {
+    if (query.statuses.length === 0) morePosts.value = false;
+    array = query.statuses;
+  }
+
+  return array.map((x) => {
+    return {
+      post : x,
+      showComments : false
+    }
+  });
 }
 
 onMounted(async () => {
-  const query = await getFeed(0, 5)
-  feed.value=query;
+  if (Number(props.userID) !== -1) {
+    const query = await getFeed(0, 5)
+    console.log(query);
+    feed.value = query;
+  }
 })
 
 async function loadMorePosts () {
@@ -43,12 +82,13 @@ async function loadMorePosts () {
 <template>
   <div>
     <h1>Here are the latest posts...</h1>
-    <FeedTextBox :url="`/account/${$props.viewer}/statuses/`"/>
+    <FeedTextBox :url="`/account/${$props.viewer}/statuses/`" v-if="showTextBox"/>
     <div v-for="p in feed">
-      <FeedPost :post="p" option="in-feed"/>
+      <FeedPost :post="p.post" option="in-feed"/>
     </div>
 
-    <button @click="loadMorePosts">Load more</button>
+    <button @click="loadMorePosts" v-if="morePosts">Load more</button>
+    <div v-else>No more posts</div>
   </div>
 
 

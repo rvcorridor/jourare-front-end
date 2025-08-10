@@ -1,6 +1,7 @@
 <script setup>
 
 import {computed, onMounted} from "vue";
+import CommentSection from "@/pages/feed-components/Comment-Section.vue";
 
 const props=defineProps(['post', 'option'])
 const computedLink=computed(() => {
@@ -21,13 +22,6 @@ const pfpURL = computed(() => {
   return props.post.profile_picture ? import.meta.env.VITE_BACKEND_URL + "/account/profile-picture/" + props.post.profile_picture : "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
 })
 
-onMounted(() => {
-  console.log("yyippee!")
-  if (props.option === "single-post") {
-    console.log("yyippee!")
-  }
-})
-
 </script>
 
 <template>
@@ -42,14 +36,16 @@ onMounted(() => {
     <div class="footer">
       <span>
         <RouterLink :to="computedLink">
-          posted {{ (new Date(post.date_of_creation)).toLocaleString() }}
+          {{ (new Date(post.date_of_creation)).toLocaleString() }}
         </RouterLink>
       </span>
-      <span class="stats"> {{$props.post.likes}} likes {{$props.post.comments}} comments </span>
+      <span class="stats">
+        <span> comment {{$props.post.comments}} </span>&nbsp;
+        <span> like {{$props.post.likes}} </span>
+      </span>
     </div>
 
   </div>
-
 </template>
 
 <style scoped>

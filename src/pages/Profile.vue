@@ -86,7 +86,7 @@ function updateRelationship (changes) {
       <div id="profile-navigation">
         <router-link :to="{name : 'messages', params : { username : profile.username}}">Send message</router-link>&nbsp;
         <router-link :to="{name : 'journals', params : { username : profile.username}}">View journals</router-link>&nbsp;
-        <router-link :to="{name : 'statuses', params : { username : profile.username}}">View statuses</router-link> &nbsp;
+        <router-link :to="{name : 'accountstatuses', params : { username : profile.username}}">View statuses</router-link> &nbsp;
         <router-link :to="{name : 'followers', params : { username : profile.username}}">View followers</router-link>
       </div>
 
