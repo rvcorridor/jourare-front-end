@@ -2,8 +2,9 @@
 
 import {computed, onMounted, ref} from "vue";
 import FeedPost from "@/pages/feed-components/Feed-Post.vue";
+import FeedTextBox from "@/pages/feed-components/Feed-Text-Box.vue";
 
-const props=defineProps(['userID'])
+const props=defineProps(['viewer'])
 const feed=ref([])
 const currOffset=ref(5)
 
@@ -45,6 +46,7 @@ async function loadMorePosts () {
 <template>
   <div>
     <h1>Here are the latest posts...</h1>
+    <FeedTextBox :url="`/account/${$props.viewer}/statuses/`"/>
     <div v-for="p in feed">
       <FeedPost :post="p" option="in-feed"/>
     </div>
