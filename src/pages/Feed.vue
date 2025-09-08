@@ -2,7 +2,7 @@
 
 import {computed, onMounted, ref} from "vue";
 import FeedPost from "@/pages/feed-components/Feed-Block.vue";
-import FeedTextBox from "@/pages/feed-components/Feed-Input-Box.vue";
+import FeedTextBox from "@/pages/feed-components/PlaintextInputBox.vue";
 import {useRouter} from "vue-router";
 
 const props=defineProps(['viewer', 'userID'])
@@ -20,7 +20,6 @@ const showTextBox = computed(() => {
 })
 
 const source=computed(() => {
-
   if (router.currentRoute.value.name === "feed") {
     return "feed";
   } else {
@@ -82,9 +81,12 @@ async function loadMorePosts () {
 <template>
   <div>
     <h1>Here are the latest posts...</h1>
-    <FeedTextBox :url="`/account/${$props.viewer}/statuses/`" v-if="showTextBox"/>
+    <FeedTextBox :url="`/account/${$props.viewer}/statuses/`" v-if="showTextBox" option="post"/>
     <div v-for="p in feed">
       <FeedPost :post="p.post" option="in-feed"/>
+      <div v-if="p.showComments">
+
+      </div>
     </div>
 
     <button @click="loadMorePosts" v-if="morePosts">Load more</button>

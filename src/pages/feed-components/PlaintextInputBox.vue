@@ -2,10 +2,17 @@
 import {ref} from "vue";
 import router from "@/router.js";
 
-const props=defineProps(['url'])
+const props=defineProps(['url', 'option'])
 const post=ref("");
 
 async function sendPost () {
+  let body={};
+  if (props.option === "post") {
+    body.postBody = post.value;
+  } else if (props.option === "comment") {
+    body.commentBody = post.value;
+
+  }
   const query = await fetch(`${import.meta.env.VITE_BACKEND_URL}${props.url}`, {
     method : 'POST',
     credentials : 'include',
@@ -13,9 +20,7 @@ async function sendPost () {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body : JSON.stringify({
-      postBody : post.value
-    })
+    body : JSON.stringify(body)
 
   })
 
